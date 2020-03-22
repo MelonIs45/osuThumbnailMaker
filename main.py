@@ -1,6 +1,6 @@
 from __future__ import print_function
 import PIL, json, os, glob, re, binascii, struct
-from PIL import Image, ImageFilter, ImageDraw
+from PIL import Image, ImageFilter, ImageDraw, ImageFont
 import numpy as np
 import math
 import scipy
@@ -12,6 +12,7 @@ user = os.getlogin()
 osuDir = os.path.join('C:/Users', user,'AppData/Local/osu!/Songs')
 fileExts = ('png', 'jpg')
 trueRanks = ('XH', 'X', 'SH', 'S', 'A', 'B', 'C', 'D', 'F')
+imgSize = (1280, 720)
 
 #question booleans
 idQuestion = None
@@ -60,7 +61,9 @@ starCount = float(input("Enter the play star count: "))
 
 bg = Image.open(bgDirFull)
 bg = bg.filter(ImageFilter.GaussianBlur(15))
+bg = bg.resize(imgSize)
 bg.show()
+
 
 #finds the most common colours in the image by splitting them up into sectors
 clusterCount1 = 1
@@ -88,18 +91,50 @@ colour2 = binascii.hexlify(bytearray(int(c) for c in peak2)).decode('ascii')
 #adds hashtag to hex values
 colour1, colour2 = ("#"+ colour1), ("#"+ colour2)
 
+#creates mask for later composition
 textBlocks = Image.new(mode="RGBA", size=(1280, 720))
 x, y = textBlocks.size
 draw = ImageDraw.Draw(textBlocks)
 
 #draws the blocks to where the text will be on
-draw.ellipse(((x/2-275), 75, (x/2-175), 175), fill=("#ffffff"))
-draw.rectangle(((x/2-225), 75, (x/2+225), 175), fill=("#ffffff"))
-draw.ellipse(((x/2+175), 75, (x/2+275), 175), fill=("#ffffff"))
+draw.ellipse(((x/2-285), (y/2-295), (x/2-165), (y/2-175)), fill=("#ffffff"))
+draw.rectangle(((x/2-230), (y/2-295), (x/2+230), (y/2-175)), fill=("#ffffff"))
+draw.ellipse(((x/2+165), (y/2-295), (x/2+285), (y/2-175)), fill=("#ffffff"))
+
+draw.ellipse(((x/2-285), (y/2-60), (x/2-165), (y/2+60)), fill=("#ffffff"))
+draw.rectangle(((x/2-230), (y/2-60), (x/2+230), (y/2+60)), fill=("#ffffff"))
+draw.ellipse(((x/2+165), (y/2-60), (x/2+285), (y/2+60)), fill=("#ffffff"))
+
+draw.ellipse(((x/2-285), (y/2+175), (x/2-165), (y/2+295)), fill=("#ffffff"))
+draw.rectangle(((x/2-230), (y/2+175), (x/2+230), (y/2+295)), fill=("#ffffff"))
+draw.ellipse(((x/2+165), (y/2+175), (x/2+285), (y/2+295)), fill=("#ffffff"))
+
+textBlocks = textBlocks.filter(ImageFilter.GaussianBlur(8))
+textBlocks.show()
+smallBlocks = Image.new(mode="RGBA", size=(1280, 720))
+x, y = smallBlocks.size
+draw = ImageDraw.Draw(smallBlocks)
+
+draw.ellipse(((x/2-275), (y/2-285), (x/2-175), (y/2-185)), fill=("#ffffff"))
+draw.rectangle(((x/2-225), (y/2-285), (x/2+225), (y/2-185)), fill=("#ffffff"))
+draw.ellipse(((x/2+175), (y/2-285), (x/2+275), (y/2-185)), fill=("#ffffff"))
+
+draw.ellipse(((x/2-275), (y/2-50), (x/2-175), (y/2+50)), fill=("#ffffff"))
+draw.rectangle(((x/2-225), (y/2-50), (x/2+225), (y/2+50)), fill=("#ffffff"))
+draw.ellipse(((x/2+175), (y/2-50), (x/2+275), (y/2+50)), fill=("#ffffff"))
+
+draw.ellipse(((x/2-275), (y/2+185), (x/2-175), (y/2+285)), fill=("#ffffff"))
+draw.rectangle(((x/2-225), (y/2+185), (x/2+225), (y/2+285)), fill=("#ffffff"))
+draw.ellipse(((x/2+175), (y/2+185), (x/2+275), (y/2+285)), fill=("#ffffff"))
+smallBlocks.show()
 
 textBlocks.show()
+textBlocks.convert('RGBA')
+bg.paste(textBlocks, (0, 0), textBlocks)
+bg.show()
 
-imgSize = (1280, 720)
+
+
 gradient = Image.new('RGB', imgSize) 
 
 innerColor = peak1 #color at the center
@@ -123,11 +158,17 @@ for y in range(imgSize[1]):
         gradient.putpixel((x, y), (int(r), int(g), int(b)))
 
 gradient.show()
-bg = bg.resize(imgSize)
 finalImage = Image.new("RGB", imgSize)
 
 #composites all the images so it creates a finished product, not finished yet
-finalImage = Image.composite(gradient, bg, textBlocks)
+finalImage = Image.composite(gradient, bg, smallBlocks)
+finalImage.show()
+
+vagRound = ImageFont.truetype("vag-rounded.ttf", 16)
+
+textDraw = ImageDraw.Draw(finalImage, "RGBA")
+textDraw.text((12, 70), str(userName), vagRound, stroke_width=2)
+
 finalImage.show()
 
 input()
