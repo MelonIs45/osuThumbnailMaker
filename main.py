@@ -1,11 +1,16 @@
 from __future__ import print_function
-import PIL, json, os, glob, re, binascii, struct
+import PIL
 from PIL import Image, ImageFilter, ImageDraw, ImageFont
 import numpy as np
 import math
 import scipy
 import scipy.misc
 import scipy.cluster
+import os
+import glob
+import re
+import binascii
+import struct
 
 user = os.getlogin()
 
@@ -29,7 +34,7 @@ while idQuestion is None:
     try:
         songId = int(input("Enter the beatmap id of the song you wish to be made a thumbnail for: "))
         idQuestion = True
-    except:
+    except ValueError:
         print("You didn't enter a correct value.")
 
 #gets the path to the image in the beatmap folder
@@ -196,7 +201,7 @@ finalImage = Image.composite(gradient, bg, smallBlocks)
 
 #different font sizes for different blocks to stop unneccesary text/block overflow
 vagRoundUserName = ImageFont.truetype("vag-rounded.ttf", 60)
-vagRoundTitle = ImageFont.truetype("vag-rounded.ttf", 40)
+vagRoundTitle = ImageFont.truetype("vag-rounded.ttf", 45)
 vagRoundStats = ImageFont.truetype("vag-rounded.ttf", 55)
 
 if userNameLength < 100:
@@ -213,4 +218,4 @@ textDraw.text(((x/2 - statsOffset + extraOffset), 560), stats, fill="#000000", f
 #finalImage.show()
 
 finalImage.save("thumbnails/"+fileName+".png")
-input()
+end = input("Done!")
