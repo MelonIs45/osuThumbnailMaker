@@ -2,7 +2,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/melonis45/osuthumbnailmaker/badge)](https://www.codefactor.io/repository/github/melonis45/osuthumbnailmaker)
 
 **Note:**
-* modules required to run with source code:
+* Modules required to run with source code:
     * PIL
     * scipy
     * numpy
