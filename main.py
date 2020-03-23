@@ -13,6 +13,10 @@ osuDir = os.path.join('C:/Users', user,'AppData/Local/osu!/Songs')
 fileExts = ('png', 'jpg')
 trueRanks = ('XH', 'X', 'SH', 'S', 'A', 'B', 'C', 'D', 'F')
 imgSize = (1280, 720)
+fontSizeUserName = 32
+fontSizeTitle = 21
+fontSizeStats = 24
+blockOutline = 10
 
 #question booleans
 idQuestion = None
@@ -31,7 +35,7 @@ while idQuestion is None:
 for songDir in glob.glob(osuDir + '/*'):
     if str(songId) in songDir:
         while oneMap is None:
-            #print(songDir)
+            titleDir = songDir
             songDirFiles = os.listdir(songDir)
             #print(songDirFiles)
             oneMap = True
@@ -41,8 +45,10 @@ for songDir in glob.glob(osuDir + '/*'):
                     bgDirFull = os.path.join(songDir, bgName)
                 else:
                     pass
+            
     else:
         pass
+
 
 #asks for rank of play
 while rankQuestion is None:
@@ -54,10 +60,32 @@ while rankQuestion is None:
         
 #extra details for thumbnail
 userName = input("Enter the user that for that play: ")
+mapDiff = input("Enter the difficulty name of the map: ")
 modsUsed = input("Enter string of mods used (HDDT, HDHR, etc.): ")
 ppCount = int(input("Enter the pp from that play: "))
 accCount = float(input("Enter the play accuracy: "))
 starCount = float(input("Enter the play star count: "))
+
+userNameLength = (len(userName)) * fontSizeUserName
+userNameOffset = userNameLength/2
+userNameBlockOffset = userNameOffset + 50
+
+splitDir = titleDir.split(" ")
+splitDir.pop(0)
+finalTitle = " ".join(splitDir)
+finalTitle = finalTitle + ((" [{0}] + {1}").format(mapDiff, modsUsed))
+print(finalTitle)
+
+titleLength = (len(finalTitle)) * fontSizeTitle
+titleOffset = titleLength/2
+titleBlockOffset = titleOffset + 50
+
+stats = "{0}pp | {1}% | {2}*".format(ppCount, accCount, starCount)
+statsLength = (len(stats)) * fontSizeStats
+statsOffset = statsLength/2
+statsBlockOffset = statsOffset + 50
+
+print(userNameLength, titleLength, stats)
 
 bg = Image.open(bgDirFull)
 bg = bg.filter(ImageFilter.GaussianBlur(15))
@@ -97,17 +125,17 @@ x, y = textBlocks.size
 draw = ImageDraw.Draw(textBlocks)
 
 #draws the blocks to where the text will be on
-draw.ellipse(((x/2-285), (y/2-295), (x/2-165), (y/2-175)), fill=("#ffffff"))
-draw.rectangle(((x/2-230), (y/2-295), (x/2+230), (y/2-175)), fill=("#ffffff"))
-draw.ellipse(((x/2+165), (y/2-295), (x/2+285), (y/2-175)), fill=("#ffffff"))
+draw.ellipse(((x/2-userNameBlockOffset-blockOutline), (y/2-300), (x/2-userNameBlockOffset+120), (y/2-170)), fill=("#ffffff"))
+draw.rectangle(((x/2-userNameBlockOffset-(blockOutline/2)+75), (y/2-300), (x/2+userNameBlockOffset-(blockOutline/2)-60), (y/2-170)), fill=("#ffffff"))
+draw.ellipse(((x/2+userNameBlockOffset-(blockOutline)-100), (y/2-300), (x/2+userNameBlockOffset-(blockOutline)+20), (y/2-170)), fill=("#ffffff"))
 
-draw.ellipse(((x/2-285), (y/2-60), (x/2-165), (y/2+60)), fill=("#ffffff"))
-draw.rectangle(((x/2-230), (y/2-60), (x/2+230), (y/2+60)), fill=("#ffffff"))
-draw.ellipse(((x/2+165), (y/2-60), (x/2+285), (y/2+60)), fill=("#ffffff"))
+draw.ellipse(((x/2-titleBlockOffset-blockOutline), (y/2-65), (x/2-titleBlockOffset+120), (y/2+65)), fill=("#ffffff"))
+draw.rectangle(((x/2-titleBlockOffset-(blockOutline/2)+75), (y/2-65), (x/2+titleBlockOffset-(blockOutline/2)-60), (y/2+65)), fill=("#ffffff"))
+draw.ellipse(((x/2+titleBlockOffset-(blockOutline)-100), (y/2-65), (x/2+titleBlockOffset-(blockOutline)+20), (y/2+65)), fill=("#ffffff"))
 
-draw.ellipse(((x/2-285), (y/2+175), (x/2-165), (y/2+295)), fill=("#ffffff"))
-draw.rectangle(((x/2-230), (y/2+175), (x/2+230), (y/2+295)), fill=("#ffffff"))
-draw.ellipse(((x/2+165), (y/2+175), (x/2+285), (y/2+295)), fill=("#ffffff"))
+draw.ellipse(((x/2-statsBlockOffset-blockOutline), (y/2+170), (x/2-statsBlockOffset+120), (y/2+300)), fill=("#ffffff"))
+draw.rectangle(((x/2-statsBlockOffset-(blockOutline/2)+75), (y/2+170), (x/2+statsBlockOffset-(blockOutline/2)-60), (y/2+300)), fill=("#ffffff"))
+draw.ellipse(((x/2+statsBlockOffset-(blockOutline)-100), (y/2+170), (x/2+statsBlockOffset-(blockOutline)+20), (y/2+300)), fill=("#ffffff"))
 
 textBlocks = textBlocks.filter(ImageFilter.GaussianBlur(8))
 textBlocks.show()
@@ -115,25 +143,23 @@ smallBlocks = Image.new(mode="RGBA", size=(1280, 720))
 x, y = smallBlocks.size
 draw = ImageDraw.Draw(smallBlocks)
 
-draw.ellipse(((x/2-275), (y/2-285), (x/2-175), (y/2-185)), fill=("#ffffff"))
-draw.rectangle(((x/2-225), (y/2-285), (x/2+225), (y/2-185)), fill=("#ffffff"))
-draw.ellipse(((x/2+175), (y/2-285), (x/2+275), (y/2-185)), fill=("#ffffff"))
+draw.ellipse(((x/2-userNameBlockOffset+blockOutline), (y/2-285), (x/2-userNameBlockOffset+120), (y/2-185)), fill=("#ffffff"))
+draw.rectangle(((x/2-userNameBlockOffset+75), (y/2-285), (x/2+userNameBlockOffset-60), (y/2-185)), fill=("#ffffff"))
+draw.ellipse(((x/2+userNameBlockOffset-120), (y/2-285), (x/2+userNameBlockOffset-blockOutline), (y/2-185)), fill=("#ffffff"))
 
-draw.ellipse(((x/2-275), (y/2-50), (x/2-175), (y/2+50)), fill=("#ffffff"))
-draw.rectangle(((x/2-225), (y/2-50), (x/2+225), (y/2+50)), fill=("#ffffff"))
-draw.ellipse(((x/2+175), (y/2-50), (x/2+275), (y/2+50)), fill=("#ffffff"))
+draw.ellipse(((x/2-titleBlockOffset+blockOutline), (y/2-50), (x/2-titleBlockOffset+120), (y/2+50)), fill=("#ffffff"))
+draw.rectangle(((x/2-titleBlockOffset+75), (y/2-50), (x/2+titleBlockOffset-60), (y/2+50)), fill=("#ffffff"))
+draw.ellipse(((x/2+titleBlockOffset-120), (y/2-50), (x/2+titleBlockOffset-blockOutline), (y/2+50)), fill=("#ffffff"))
 
-draw.ellipse(((x/2-275), (y/2+185), (x/2-175), (y/2+285)), fill=("#ffffff"))
-draw.rectangle(((x/2-225), (y/2+185), (x/2+225), (y/2+285)), fill=("#ffffff"))
-draw.ellipse(((x/2+175), (y/2+185), (x/2+275), (y/2+285)), fill=("#ffffff"))
+draw.ellipse(((x/2-statsBlockOffset+blockOutline), (y/2+185), (x/2-statsBlockOffset+120), (y/2+285)), fill=("#ffffff"))
+draw.rectangle(((x/2-statsBlockOffset+75), (y/2+185), (x/2+statsBlockOffset-60), (y/2+285)), fill=("#ffffff"))
+draw.ellipse(((x/2+statsBlockOffset-120), (y/2+185), (x/2+statsBlockOffset-blockOutline), (y/2+285)), fill=("#ffffff"))
 smallBlocks.show()
 
 textBlocks.show()
 textBlocks.convert('RGBA')
 bg.paste(textBlocks, (0, 0), textBlocks)
 bg.show()
-
-
 
 gradient = Image.new('RGB', imgSize) 
 
@@ -164,10 +190,19 @@ finalImage = Image.new("RGB", imgSize)
 finalImage = Image.composite(gradient, bg, smallBlocks)
 finalImage.show()
 
-vagRound = ImageFont.truetype("vag-rounded.ttf", 16)
+vagRoundUserName = ImageFont.truetype("vag-rounded.ttf", 60)
+vagRoundTitle = ImageFont.truetype("vag-rounded.ttf", 45)
+vagRoundStats = ImageFont.truetype("vag-rounded.ttf", 55)
 
-textDraw = ImageDraw.Draw(finalImage, "RGBA")
-textDraw.text((12, 70), str(userName), vagRound, stroke_width=2)
+if userNameLength < 100:
+    extraOffset = -6
+else:
+    extraOffset = 5
+
+textDraw = ImageDraw.Draw(finalImage)
+textDraw.text(((x/2 - userNameOffset + extraOffset), 85), userName, fill="#000000", font=vagRoundUserName, stroke_width=2, stroke_fill="#ffffff")
+textDraw.text(((x/2 - titleOffset + extraOffset), 330), finalTitle, fill="#000000", font=vagRoundTitle, stroke_width=2, stroke_fill="#ffffff")
+textDraw.text(((x/2 - statsOffset + extraOffset), 560), stats, fill="#000000", font=vagRoundStats, stroke_width=2, stroke_fill="#ffffff")
 
 finalImage.show()
 
