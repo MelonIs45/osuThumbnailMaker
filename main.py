@@ -72,6 +72,7 @@ userNameBlockOffset = userNameOffset + 50
 
 splitDir = titleDir.split(" ")
 splitDir.pop(0)
+fileName = " ".join(splitDir)
 finalTitle = " ".join(splitDir)
 finalTitle = finalTitle + ((" [{0}] + {1}").format(mapDiff, modsUsed))
 print(finalTitle)
@@ -195,7 +196,7 @@ finalImage = Image.composite(gradient, bg, smallBlocks)
 
 #different font sizes for different blocks to stop unneccesary text/block overflow
 vagRoundUserName = ImageFont.truetype("vag-rounded.ttf", 60)
-vagRoundTitle = ImageFont.truetype("vag-rounded.ttf", 45)
+vagRoundTitle = ImageFont.truetype("vag-rounded.ttf", 40)
 vagRoundStats = ImageFont.truetype("vag-rounded.ttf", 55)
 
 if userNameLength < 100:
@@ -211,4 +212,5 @@ textDraw.text(((x/2 - statsOffset + extraOffset), 560), stats, fill="#000000", f
 
 #finalImage.show()
 
+finalImage.save("thumbnails/"+fileName+".png")
 input()
