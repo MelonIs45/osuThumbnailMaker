@@ -1,5 +1,4 @@
 from __future__ import print_function
-import PIL
 from PIL import Image, ImageFilter, ImageDraw, ImageFont
 import numpy as np
 import math
@@ -16,7 +15,7 @@ user = os.getlogin()
 
 osuDir = os.path.join('C:/Users', user,'AppData/Local/osu!/Songs')
 fileExts = ('png', 'jpg')
-# trueRanks = ('XH', 'X', 'SH', 'S', 'A', 'B', 'C', 'D', 'F')
+trueRanks = ('XH', 'X', 'SH', 'S', 'A', 'B', 'C', 'D')
 imgSize = (1280, 720)
 fontSizeUserName = 32
 fontSizeTitle = 21
@@ -55,12 +54,12 @@ for songDir in glob.glob(osuDir + '/*'):
         pass
 
 #asks for rank of play
-# while rankQuestion is None:
-#     playRank = input("Enter the rank of the play (XH, X, SH, S, A, B, C, D, F): ")
-#     if playRank in trueRanks:
-#         rankQuestion = True
-#     else:
-#         print("You entered an incorrect rank.")
+while rankQuestion is None:
+    playRank = input("Enter the rank of the play (XH, X, SH, S, A, B, C, D): ")
+    if playRank in trueRanks:
+        rankQuestion = True
+    else:
+        print("You entered an incorrect rank.")
         
 #extra details for thumbnail
 userName = input("Enter the user that for that play: ")
@@ -215,7 +214,11 @@ textDraw.text(((x/2 - userNameOffset + extraOffset), 85), userName, fill="#00000
 textDraw.text(((x/2 - titleOffset + extraOffset), 330), finalTitle, fill="#000000", font=vagRoundTitle, stroke_width=2, stroke_fill="#ffffff")
 textDraw.text(((x/2 - statsOffset + extraOffset), 560), stats, fill="#000000", font=vagRoundStats, stroke_width=2, stroke_fill="#ffffff")
 
-#finalImage.show()
+#adds rank to image
+rankImage = Image.open("ranks/{}.png".format(playRank))
+finalImage.paste(rankImage, (25, 25), rankImage)
+
+finalImage.show()
 
 finalImage.save("thumbnails/"+fileName+".png")
 end = input("Done!")
