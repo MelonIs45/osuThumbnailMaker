@@ -2,12 +2,13 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/melonis45/osuthumbnailmaker/badge)](https://www.codefactor.io/repository/github/melonis45/osuthumbnailmaker)
 
 **Note:**
-**CREATED USING PYTHON 3.6.8, YOUR MILEAGE MAY VARY ON DIFFERENT VERSIONS**
+* CREATED USING PYTHON 3.6.8, YOUR MILEAGE MAY VARY ON DIFFERENT VERSIONS
 * Modules required to run with source code:
     * PIL
     * scipy
     * numpy
 * Can be installed with: `pip install PIL scipy numpy`
+* If title is too long in the final image and is going out of the canvas change the `fontTitle` variables' font size parameter to a smaller or greater number
 
 **Features:**
 * Saves images into a folder
