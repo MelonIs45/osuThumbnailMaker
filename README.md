@@ -2,6 +2,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/melonis45/osuthumbnailmaker/badge)](https://www.codefactor.io/repository/github/melonis45/osuthumbnailmaker)
 
 **Note:**
+**CREATED USING PYTHON 3.6.8, YOUR MILEAGE MAY VARY ON DIFFERENT VERSIONS**
 * Modules required to run with source code:
     * PIL
     * scipy
