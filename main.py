@@ -1,5 +1,7 @@
 from __future__ import print_function
 from PIL import Image, ImageFilter, ImageDraw, ImageFont
+import random
+from random import randint
 import numpy as np
 import math
 import scipy
@@ -11,6 +13,7 @@ import re
 import binascii
 import struct
 
+
 user = os.getlogin()
 
 osuDir = os.path.join('C:/Users', user,'AppData/Local/osu!/Songs')
@@ -18,7 +21,7 @@ fileExts = ('png', 'jpg')
 trueRanks = ('XH', 'X', 'SH', 'S', 'A', 'B', 'C', 'D')
 imgSize = (1280, 720)
 fontSizeUserName = 32
-fontSizeTitle = 21
+fontSizeTitle = 17
 fontSizeStats = 24
 blockOutline = 10
 
@@ -90,7 +93,7 @@ statsLength = (len(stats)) * fontSizeStats
 statsOffset = statsLength/2
 statsBlockOffset = statsOffset + 50
 
-print(userNameLength, titleLength, stats)
+print(stats)
 
 bg = Image.open(bgDirFull)
 bg = bg.filter(ImageFilter.GaussianBlur(15))
@@ -199,9 +202,10 @@ finalImage = Image.composite(gradient, bg, smallBlocks)
 #finalImage.show()
 
 #different font sizes for different blocks to stop unneccesary text/block overflow
-vagRoundUserName = ImageFont.truetype("vag-rounded.ttf", 60)
-vagRoundTitle = ImageFont.truetype("vag-rounded.ttf", 45)
-vagRoundStats = ImageFont.truetype("vag-rounded.ttf", 55)
+#change the font size by changing the parameter to a smaller or greater number
+fontUserName = ImageFont.truetype("fonts/vag-rounded.ttf", 60)
+fontTitle = ImageFont.truetype("fonts/vag-rounded.ttf", 36)
+fontStats = ImageFont.truetype("fonts/vag-rounded.ttf", 55)
 
 if userNameLength < 100:
     extraOffset = -6
@@ -210,15 +214,16 @@ else:
 
 #places text to image
 textDraw = ImageDraw.Draw(finalImage)
-textDraw.text(((x/2 - userNameOffset + extraOffset), 85), userName, fill="#000000", font=vagRoundUserName, stroke_width=2, stroke_fill="#ffffff")
-textDraw.text(((x/2 - titleOffset + extraOffset), 330), finalTitle, fill="#000000", font=vagRoundTitle, stroke_width=2, stroke_fill="#ffffff")
-textDraw.text(((x/2 - statsOffset + extraOffset), 560), stats, fill="#000000", font=vagRoundStats, stroke_width=2, stroke_fill="#ffffff")
+textDraw.text(((x/2 - userNameOffset + extraOffset), 85), userName, fill="#000000", font=fontUserName, stroke_width=2, stroke_fill="#ffffff")
+textDraw.text(((x/2 - titleOffset + extraOffset), 330), finalTitle, fill="#000000", font=fontTitle, stroke_width=2, stroke_fill="#ffffff")
+textDraw.text(((x/2 - statsOffset + extraOffset), 560), stats, fill="#000000", font=fontStats, stroke_width=2, stroke_fill="#ffffff")
 
 #adds rank to image
 rankImage = Image.open("ranks/{}.png".format(playRank))
 finalImage.paste(rankImage, (25, 25), rankImage)
 
 finalImage.show()
+numberrand = random.randint(1,1000)
 
-finalImage.save("thumbnails/"+fileName+".png")
+finalImage.save("thumbnails/"+fileName+"{0}.png".format(numberrand))
 end = input("Done!")
