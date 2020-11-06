@@ -21,7 +21,7 @@ fileExts = ('png', 'jpg')
 trueRanks = ('XH', 'X', 'SH', 'S', 'A', 'B', 'C', 'D')
 imgSize = (1280, 720)
 fontSizeUserName = 32
-fontSizeTitle = 17
+fontSizeTitle = 21 #17
 fontSizeStats = 24
 blockOutline = 10
 
@@ -204,7 +204,7 @@ finalImage = Image.composite(gradient, bg, smallBlocks)
 #different font sizes for different blocks to stop unneccesary text/block overflow
 #change the font size by changing the parameter to a smaller or greater number
 fontUserName = ImageFont.truetype("fonts/vag-rounded.ttf", 60)
-fontTitle = ImageFont.truetype("fonts/vag-rounded.ttf", 36)
+fontTitle = ImageFont.truetype("fonts/vag-rounded.ttf", 45) #36
 fontStats = ImageFont.truetype("fonts/vag-rounded.ttf", 55)
 
 if userNameLength < 100:
